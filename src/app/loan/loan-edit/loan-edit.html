@@ -1,0 +1,69 @@
+<div class="container">
+    @if (id ()) {
+        <h1>Modificar préstamo</h1>
+    } @else {
+        <h1>Crear préstamo</h1>
+    }
+
+    <form autocomplete="off">
+        <mat-form-field>
+            <mat-label>Identificador</mat-label>
+            <input type="text" matInput placeholder="Identificador" [value]="id()" disabled>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Juego</mat-label>
+            <select matNativeControl [ngModel]="game()?.id" (ngModelChange)="onGameChange($event)" name="game" required>
+                <option [value]="null"></option>
+
+                @for (g of games; track g.id) {
+                    <option [value]="g.id"> {{ g.title }}</option>
+                }
+            </select>
+
+            <mat-error>Debe seleccionar un juego</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Cliente</mat-label>
+            <select matNativeControl [ngModel]="client()?.id" (ngModelChange)="onClientChange($event)" name="client" required>
+                <option [value]="null"></option>
+
+                @for (c of clients; track c.id) {
+                    <option [value]="c.id"> {{ c.name }}</option>
+                }
+            </select>
+
+            <mat-error>Debe seleccionar un cliente</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Fecha Inicio</mat-label>
+            <input matInput [matDatepicker]="pickerStart" [min]="minDate" [ngModel]="dateStart()"(ngModelChange)="dateStart.set($event)" name="dateStart">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+            <mat-error>La fecha de inicio es obligatoria</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Fecha Final</mat-label>
+            <input matInput [matDatepicker]="pickerEnd" [min]="dateStart() || minDate" [ngModel]="dateEnd()"(ngModelChange)="dateEnd.set($event)" name="dateEnd">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+            <mat-error>La fecha de fin es obligatoria</mat-error>
+        </mat-form-field>
+
+        @if (errorMessage()) {
+            <div class="error-message">
+                {{ errorMessage() }}
+            </div>
+        }
+
+    </form>
+
+    <div class="buttons">
+        <button mat-stroked-button (click)="onClose()">Cerrar</button>
+        <button mat-flat-button color="primary" (click)="onSave()">Guardar</button>
+    </div>
+
+</div>

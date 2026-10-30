@@ -1,0 +1,105 @@
+<div class="container">
+    <h1>Listado de Préstamos</h1>
+
+    <div class="filters">
+        <form>
+            <mat-form-field>
+                <mat-label>Juego</mat-label>
+                <select 
+                matNativeControl 
+                [(ngModel)]="selectedGameId"
+                name="game">
+                    <option [ngValue]="undefined">Seleccione un juego</option>
+                    @for (game of games; track game.id) {
+                        <option [ngValue]="game.id">{{ game.title }}</option>
+                    }
+                </select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Cliente</mat-label>
+                <select 
+                matNativeControl 
+                [(ngModel)]="selectedClientId"
+                name="client">
+                    <option [ngValue]="undefined">Seleccione un cliente</option>
+                    @for (client of clients; track client.id) {
+                        <option [ngValue]="client.id">{{ client.name }}</option>
+                    }
+                </select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Fecha</mat-label>
+                <input 
+                matInput
+                [matDatepicker]="picker"
+                [(ngModel)]="selectedDate"
+                name="date"
+                >
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </form>
+
+        <div class="buttons">
+            <button mat-stroked-button (click)="onCleanFilter()">Limpiar</button>
+            <button mat-flat-button color="primary" (click)="onSearch()">Filtrar</button>
+        </div>
+    </div>
+
+    <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> Identificador </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="game">
+            <mat-header-cell *matHeaderCellDef> Juego </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.game.title}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="client">
+            <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.client.name}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateStart">
+            <mat-header-cell *matHeaderCellDef> Fecha inicio </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.dateStart | date: 'dd/MM/yyyy'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateEnd">
+            <mat-header-cell *matHeaderCellDef> Fecha final </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.dateEnd | date: 'dd/MM/yyyy'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>"
+            <mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="editLoan(element)">
+                    <mat-icon>edit</mat-icon> 
+                </button>
+                <button mat-icon-button color="primary" (click)="deleteLoan(element)">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>"
+    </mat-table>
+
+    <mat-paginator 
+        (page)="loadPage($event)" 
+        [pageSizeOptions]="[5, 10, 20]" 
+        [pageIndex]="pageNumber" 
+        [pageSize]="pageSize" 
+        [length]="totalElements" 
+        showFirstLastButtons>
+    </mat-paginator>
+
+    <div class="buttons">
+        <button mat-flat-button color="primary" (click)="createLoan()">Nuevo préstamo</button>
+    </div>
+</div>
