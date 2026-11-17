@@ -28,10 +28,23 @@ export class LoanService {
         });
     }
 
+    private formatDate(date: Date):
+    string {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
     saveLoan(loan: Loan): Observable<Loan> {
+
+        const body = {
+            ...loan, 
+            
+            dateStart: loan.dateStart ? this.formatDate(loan.dateStart) : null,
+            dateEnd: loan.dateEnd ? this.formatDate(loan.dateEnd) : null
+        };
+
         const { id } = loan;
         const url = id? `${this.baseUrl}/${id}`: this.baseUrl;
-        return this.http.put<Loan>(url, loan);
+        return this.http.put<Loan>(url, body);
     }
 
     deleteLoan(idLoan: number): Observable<void> {
