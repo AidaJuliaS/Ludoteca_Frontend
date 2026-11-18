@@ -68,8 +68,15 @@ export class ClientList implements OnInit{
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.clientService.deleteClient(client.id).subscribe(result => {
-          this.loadData();
+        this.clientService.deleteClient(client.id).subscribe({ next: () => {
+          this.loadData(); 
+        },
+
+        error: () => {
+          this.dialog.open(DialogConfirmationComponent, {
+            data: {title: 'Operación no permitida', description: 'No se puede eliminar un cliente con préstamos asociados.', infoOnly: true }
+          });
+        }
         });
       }
     });
