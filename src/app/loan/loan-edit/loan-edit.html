@@ -39,7 +39,7 @@
 
         <mat-form-field>
             <mat-label>Fecha Inicio</mat-label>
-            <input matInput [matDatepicker]="pickerStart" [min]="minDate" [ngModel]="dateStart()"(ngModelChange)="dateStart.set($event)" name="dateStart">
+            <input matInput [matDatepicker]="pickerStart" [min]="minDate" [ngModel]="dateStart()"(ngModelChange)="onDateStartChange($event)" name="dateStart">
             <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
             <mat-datepicker #pickerStart></mat-datepicker>
             <mat-error>La fecha de inicio es obligatoria</mat-error>
@@ -47,7 +47,7 @@
 
         <mat-form-field>
             <mat-label>Fecha Final</mat-label>
-            <input matInput [matDatepicker]="pickerEnd" [min]="dateStart() || minDate" [ngModel]="dateEnd()"(ngModelChange)="dateEnd.set($event)" name="dateEnd">
+            <input matInput [matDatepicker]="pickerEnd" [min]="dateStart() || minDate" [max]="maxEndDate" [ngModel]="dateEnd()"(ngModelChange)="dateEnd.set($event)" name="dateEnd">
             <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
             <mat-datepicker #pickerEnd></mat-datepicker>
             <mat-error>La fecha de fin es obligatoria</mat-error>

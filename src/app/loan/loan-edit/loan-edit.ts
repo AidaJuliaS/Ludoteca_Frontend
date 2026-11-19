@@ -48,6 +48,7 @@ export class LoanEdit implements OnInit{
   protected readonly errorMessage = signal<string | null> (null);
 
   readonly minDate = new Date();
+  maxEndDate: Date | null = null;
 
   games: Game[] = [];
   clients: Client[] = [];
@@ -139,5 +140,17 @@ export class LoanEdit implements OnInit{
 
   onClose() {
     this.dialogRef.close(false);
+  }
+
+  onDateStartChange(date: Date | null) {
+    this.dateStart.set(date);
+
+    if (date) {
+      const maxDate = new Date(date);
+      maxDate.setDate(maxDate.getDate() + 14);
+      this.maxEndDate = maxDate;
+    } else {
+      this.maxEndDate = null;
+    }
   }
 }
