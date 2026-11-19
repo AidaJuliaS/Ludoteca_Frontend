@@ -97,6 +97,18 @@ export class LoanEdit implements OnInit{
       return;
     }
 
+    if (dateStart >= dateEnd) {
+      this.errorMessage.set('La fecha de devolución debe ser posterior a la fecha de préstamo.'); 
+      return;
+    }
+
+    const diffDays = (dateEnd.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (diffDays > 14) {
+      this.errorMessage.set('El préstamo no puede superar los 14 días.');
+      return;
+    }
+
     const loan = {
       id,
       game,
@@ -108,8 +120,19 @@ export class LoanEdit implements OnInit{
       next: () => {
       this.dialogRef.close(true);
     },
-    error: () => {
-      this.errorMessage.set('La operación no es válida');
+    error: (error) => {
+      
+      if (error.status === 409) {
+        this.errorMessage.set('Ya existe un préstamo solapado para las fechas seleccionadas.');
+        return;
+      }
+
+      if (error.status === 400) {
+        this.errorMessage.set('Los datos introducidos no son válidos.');
+        return;
+      }
+
+      this.errorMessage.set('Se ha producido un error inesperado.')
     }
   });
 }

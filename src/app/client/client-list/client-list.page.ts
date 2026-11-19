@@ -74,7 +74,7 @@ export class ClientList implements OnInit{
 
         error: () => {
           this.dialog.open(DialogConfirmationComponent, {
-            data: {title: 'Operación no permitida', description: 'No se puede eliminar un cliente con préstamos asociados.', infoOnly: true }
+            data: {title: 'Operación no permitida', description: 'Este cliente tiene préstamos asociados y no puede eliminarse hasta que dichos préstamos sean eliminados.', infoOnly: true }
           });
         }
         });
